@@ -20,13 +20,16 @@ export const Info = ({
         )
     }
 
+    const orgImageUrl = organization?.imageUrl || ""; // Provide a default image
+    const orgName = organization?.name || "Unknown Organization"; // Provide a fallback name
+
     return (
         <div className="flex items-center gap-x-4">
             <div className="w-[60px] h-[60px] relative">
                 <Image
                     fill
-                    src={organization?.imageUrl!}
-                    alt={organization?.name!}
+                    src={orgImageUrl}
+                    alt={orgName}
                     className="rounded-md object-cover"
                 />
             </div>

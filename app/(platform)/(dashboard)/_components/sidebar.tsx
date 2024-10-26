@@ -18,11 +18,14 @@ interface SidebarProps {
 export const Sidebar = ({
     storageKey = "t-sidebar-state"
 }: SidebarProps) => {
-    const [expanded, setExpanded] = useLocalStorage<Record<string, any>>(storageKey, {});
+    // Define a more specific type for expanded
+    const [expanded, setExpanded] = useLocalStorage<Record<string, boolean>>(storageKey, {});
+    
     const {
         organization: activeOrganization,
         isLoaded: isLoadedOrg
-    } = useOrganization()
+    } = useOrganization();
+    
     const {
         userMemberships,
         isLoaded: isLoadedOrgList
@@ -30,23 +33,22 @@ export const Sidebar = ({
         userMemberships: {
             infinite: true
         }
-    })
+    });
 
     const defaultAccordionValue: string[] = Object.keys(expanded)
         .reduce((acc: string[], key: string) => {
             if (expanded[key]) {
-                acc.push(key)
+                acc.push(key);
             }
-
-            return acc
-        }, [])
+            return acc;
+        }, []);
 
     const onExpand = (id: string) => {
         setExpanded((curr) => ({
             ...curr,
-            [id]: !expanded[id]
-        }))
-    }
+            [id]: !curr[id], // Access curr instead of expanded
+        }));
+    };
 
     if (!isLoadedOrg || !isLoadedOrgList || userMemberships.isLoading) {
         return (
@@ -61,7 +63,7 @@ export const Sidebar = ({
                     <NavItem.Skeleton />
                 </div>
             </>
-        )
+        );
     }
 
     return (
@@ -78,9 +80,7 @@ export const Sidebar = ({
                     className="ml-auto"
                 >
                     <Link href="/select-org">
-                        <Plus
-                            className="h-4 w-4"
-                        />
+                        <Plus className="h-4 w-4" />
                     </Link>
                 </Button>
             </div>
@@ -100,5 +100,5 @@ export const Sidebar = ({
                 ))}
             </Accordion>
         </>
-    )
+    );
 }

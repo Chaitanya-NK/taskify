@@ -1,7 +1,4 @@
-"use client"
-
 import { useState, useEffect } from "react"
-
 import { unsplash } from "@/lib/unsplash"
 import { Check, Loader2 } from "lucide-react"
 import { useFormStatus } from "react-dom"
@@ -16,15 +13,39 @@ interface FormPickerProps {
     errors?: Record<string, string[] | undefined>
 }
 
+interface UnsplashImage {
+    id: string;
+    slug?: string;
+    urls: {
+        raw: string;
+        full: string;
+        regular: string;
+        small: string;
+        thumb: string;
+        small_s3?: string;
+    };
+    links: {
+        html: string;
+    };
+    user: {
+        id: string;
+        name: string;
+        links: {
+            html: string;
+        };
+    };
+}
+
+
 export const FormPicker = ({
     id,
     errors
 }: FormPickerProps) => {
     const { pending } = useFormStatus()
 
-    const [images, setImages] = useState<Array<Record<string, any>>>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [selectedImageId, setSelectedImageId] = useState(null)
+    const [images, setImages] = useState<UnsplashImage[]>([])
+    const [isLoading, setIsLoading] = useState(true)
+    const [selectedImageId, setSelectedImageId] = useState<string | null>(null)
 
     useEffect(() => {
         const fetchImages = async () => {
@@ -35,20 +56,20 @@ export const FormPicker = ({
                 })
 
                 if (result && result.response) {
-                    const newImages = (result.response as Array<Record<string, any>>)
+                    const newImages = result.response as UnsplashImage[]
                     setImages(newImages)
                 } else {
-                    console.error("Failed to get images from unsplash")
+                    console.error("Failed to get images from Unsplash")
                 }
             } catch (error) {
                 console.log(error)
-                setImages(defaultImages)
+                setImages(defaultImages as UnsplashImage[])
             } finally {
                 setIsLoading(false)
             }
         }
 
-        fetchImages();
+        fetchImages()
     }, [])
 
     if (isLoading) {
@@ -62,9 +83,9 @@ export const FormPicker = ({
     return (
         <div className="relative">
             <div className="grid grid-cols-3 gap-2 mb-2">
-                {images.map((image, index) => (
+                {images.map((image) => (
                     <div
-                        key={index}
+                        key={image.id}
                         className={cn(
                             "cursor-pointer relative aspect-video group hover:opacity-75 transition bg-muted",
                             pending && "opacity-50 hover:opacity-50 cursor-auto"
@@ -97,7 +118,7 @@ export const FormPicker = ({
                         <Link
                             href={image.links.html}
                             target="_blank"
-                            className="opacity-0 hover:opacity-100 absolute bottom-0  w-full text-[10px] truncate text-white hover:underline p-1 bg-black/50"
+                            className="opacity-0 hover:opacity-100 absolute bottom-0 w-full text-[10px] truncate text-white hover:underline p-1 bg-black/50"
                         >
                             {image.user.name}
                         </Link>
@@ -111,4 +132,3 @@ export const FormPicker = ({
         </div>
     )
 }
-

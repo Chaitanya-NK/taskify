@@ -47,6 +47,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 mode: "subscription",
                 billing_address_collection: "auto",
                 customer_email: user.emailAddresses[0].emailAddress,
+                shipping_address_collection: {
+                    allowed_countries: ["IN"],
+                },
                 line_items: [
                     {
                         price_data: {
@@ -58,13 +61,15 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                             unit_amount: 200000,
                             recurring: {
                                 interval: "month"
-                            }
+                            },
+                            
                         },
                         quantity: 1
                     }
                 ],
                 metadata: {
-                    orgId
+                    orgId,
+                    customer_name: user.firstName + " " + user.lastName
                 }
             });
             url = stripeSession.url || "";

@@ -67,7 +67,7 @@ export const Sidebar = ({
 
     return (
         <>
-            <div className="font-medium text-xs flex items-center mb-1">
+            <div className="text-md font-semibold flex items-center mb-1">
                 <span className="pl-4">
                     Workspaces
                 </span>

@@ -11,6 +11,7 @@ import { CreateBoard } from "./schema";
 import { createAuditLog } from "@/lib/create-audit-log";
 import { ACTION, ENTITY_TYPE } from "@prisma/client";
 import { incrementAvailableCount, hasAvailableCount } from "@/lib/org-limit";
+import { checkSubscriptiion } from "@/lib/subscription";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
     const { userId, orgId } = auth();
@@ -22,8 +23,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     }
 
     const canCreateBoard = await hasAvailableCount()
+    const isPro = await checkSubscriptiion()
 
-    if(!canCreateBoard) {
+    if(!canCreateBoard && !isPro) {
         return {
             error: "You have reached the limit of boards you can create. Please upgrade your plan."
         }
@@ -60,7 +62,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
             }
         })
 
-        await incrementAvailableCount()
+        if(!isPro) {
+            await incrementAvailableCount()
+        }
 
         await createAuditLog({
             entityTitle: board.title,

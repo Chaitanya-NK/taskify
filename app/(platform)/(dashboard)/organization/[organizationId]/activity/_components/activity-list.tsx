@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { ActivityItem } from "@/components/activity-item";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AuditLog } from "@prisma/client";
 
 export const ActivityList = async () => {
     const { orgId } = auth();
@@ -26,7 +27,7 @@ export const ActivityList = async () => {
             <p className="hidden last:block text-xs text-center text-muted-foreground">
                 No activity found inside this organization
             </p>
-            {auditLogs.map((log) => (
+            {auditLogs.map((log: AuditLog) => (
                 <ActivityItem key={log.id} data={log} />
             ))}
         </ol>

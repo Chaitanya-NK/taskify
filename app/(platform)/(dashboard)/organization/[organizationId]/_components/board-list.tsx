@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { MAX_FREE_BOARDS } from "@/constants/boards"
 import { getAvailableCount } from "@/lib/org-limit"
 import { checkSubscriptiion } from "@/lib/subscription"
+import { Board } from "@prisma/client"
 
 export const BoardList = async () => {
 
@@ -38,7 +39,7 @@ export const BoardList = async () => {
                 Your boards
             </div>
             <div className="grid grid-cols-2 sm:gird-cols-3 lg:grid-cols-4 gap-4">
-                {boards.map((board) => (
+                {boards.map((board: Board) => (
                     <Link
                         key={board.id}
                         href={`/board/${board.id}`}

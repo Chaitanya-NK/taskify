@@ -35,6 +35,6 @@ export async function GET(
         return NextResponse.json(card)
 
     } catch (error) {
-        return new NextResponse("Error fetching card", { status: 500 })
+        return new NextResponse(`Error fetching card ${error}`, { status: 500 })
     }
 }

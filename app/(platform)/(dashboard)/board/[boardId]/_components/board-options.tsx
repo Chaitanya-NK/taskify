@@ -22,7 +22,7 @@ export const BoardOptions = ({
 }: BoardOptionsProps) => {
 
     const { execute, isLoading } = useAction(deleteBoard, {
-        onError: (error) => {
+        onError: () => {
             toast.error("Error deleting board")
         }
     })

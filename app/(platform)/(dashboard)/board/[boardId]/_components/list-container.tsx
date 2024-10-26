@@ -80,7 +80,7 @@ export const ListContainer = ({
 
         // user moves a card
         if(type === "card") {
-            let newOrderedData = [...orderedData]
+            const newOrderedData = [...orderedData]
 
             // Source and destination list
             const sourceList = newOrderedData.find((list) => list.id === source.droppableId)
